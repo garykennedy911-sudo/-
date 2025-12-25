@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Lux Market</title>
+<style>
+body{font-family:Arial;direction:rtl;background:#f5f5f5;margin:0;padding:15px}
+h1{text-align:center}
+nav{text-align:center;margin-bottom:15px}
+nav button{margin:4px;padding:10px 12px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:#fff;padding:8px;border-radius:8px;text-align:center}
+.card img{width:100%;height:130px;object-fit:cover;border-radius:5px}
+</style>
+</head>
+<body>
+
+<h1>Lux Market</h1>
+
+<nav>
+<button onclick="loadCat('mens-shirts')">ألبسة</button>
+<button onclick="loadCat('laptops')">إلكترونيات</button>
+<button onclick="loadCat('home-decoration')">أجهزة منزلية</button>
+<button onclick="loadCat('smartphones')">هواتف</button>
+<button onclick="loadCat('sunglasses')">إكسسوارات</button>
+</nav>
+
+<div id="products" class="grid"></div>
+
+<script>
+function loadCat(cat){
+fetch('https://dummyjson.com/products/category/'+cat+'?limit=200')
+.then(r=>r.json())
+.then(d=>{
+let box=document.getElementById('products');
+box.innerHTML='';
+d.products.forEach(p=>{
+box.innerHTML+=`
+<div class="card">
+<img src="${p.thumbnail}">
+<h4>${p.title}</h4>
+<p>$${p.price}</p>
+</div>`;
+});
+});
+}
+</script>
+
+</body>
+</html>
