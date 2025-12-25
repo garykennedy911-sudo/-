@@ -3,46 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <title>Lux Market</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body{font-family:Arial;direction:rtl;background:#f5f5f5;margin:0;padding:15px}
-h1{text-align:center}
-nav{text-align:center;margin-bottom:15px}
-nav button{margin:4px;padding:10px 12px;font-size:14px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.card{background:#fff;padding:8px;border-radius:8px;text-align:center}
-.card img{width:100%;height:130px;object-fit:cover;border-radius:5px}
+body {
+  margin:0;
+  font-family:Arial;
+  direction:rtl;
+  background:#f5f5f5;
+  padding-bottom:70px;
+}
+
+/* Sections */
+.section {
+  display:none;
+  padding:15px;
+}
+.section.active {
+  display:block;
+}
+
+/* Product card */
+.product {
+  background:#fff;
+  border-radius:10px;
+  padding:10px;
+  margin-bottom:10px;
+}
+.product button {
+  background:#000;
+  color:#fff;
+  border:none;
+  padding:8px;
+  width:100%;
+  border-radius:5px;
+}
+
+/* Bottom Nav */
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#fff;
+  display:flex;
+  border-top:1px solid #ddd;
+}
+.bottom-nav div {
+  flex:1;
+  text-align:center;
+  padding:10px;
+  font-size:14px;
+}
+.bottom-nav div.active {
+  background:#000;
+  color:#fff;
+}
+
+/* Account */
+.account-box {
+  background:#fff;
+  border-radius:10px;
+  padding:15px;
+  text-align:center;
+}
+.account-box img {
+  width:80px;
+  height:80px;
+  border-radius:50%;
+}
+.btn {
+  background:#000;
+  color:#fff;
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  width:100%;
+  border-radius:5px;
+}
 </style>
 </head>
+
 <body>
 
-<h1>Lux Market</h1>
+<!-- حسابي -->
+<div id="account" class="section active">
+  <div class="account-box">
+    <img src="https://i.imgur.com/8Km9tLL.png">
+    <h3>مرحبا بك</h3>
+    <p>رصيدك: <strong>0.00$</strong></p>
+    <button class="btn">إيداع</button>
+    <button class="btn">سحب</button>
+  </div>
+</div>
 
-<nav>
-<button onclick="loadCat('mens-shirts')">ألبسة</button>
-<button onclick="loadCat('laptops')">إلكترونيات</button>
-<button onclick="loadCat('home-decoration')">أجهزة منزلية</button>
-<button onclick="loadCat('smartphones')">هواتف</button>
-<button onclick="loadCat('sunglasses')">إكسسوارات</button>
-</nav>
+<!-- المتجر -->
+<div id="shop" class="section">
+  <h3>الأقسام</h3>
 
-<div id="products" class="grid"></div>
+  <div class="product">
+    <h4>قميص رجالي</h4>
+    <p>20$</p>
+    <button onclick="addToCart('قميص رجالي',20)">إضافة للسلة</button>
+  </div>
+
+  <div class="product">
+    <h4>هاتف ذكي</h4>
+    <p>300$</p>
+    <button onclick="addToCart('هاتف ذكي',300)">إضافة للسلة</button>
+  </div>
+</div>
+
+<!-- السلة -->
+<div id="cart" class="section">
+  <h3>سلّتي</h3>
+  <div id="cartItems"></div>
+</div>
+
+<!-- test -->
+<div id="test" class="section">
+  <h3>test</h3>
+  <p>قيد التطوير...</p>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <div class="active" onclick="showSection('account',this)">حسابي</div>
+  <div onclick="showSection('shop',this)">المتجر</div>
+  <div onclick="showSection('cart',this)">سلّتي</div>
+  <div onclick="showSection('test',this)">test</div>
+</div>
 
 <script>
-function loadCat(cat){
-fetch('https://dummyjson.com/products/category/'+cat+'?limit=200')
-.then(r=>r.json())
-.then(d=>{
-let box=document.getElementById('products');
-box.innerHTML='';
-d.products.forEach(p=>{
-box.innerHTML+=`
-<div class="card">
-<img src="${p.thumbnail}">
-<h4>${p.title}</h4>
-<p>$${p.price}</p>
-</div>`;
-});
-});
+let cart = [];
+
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  document.querySelectorAll('.bottom-nav div').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+
+  if(id === 'cart') renderCart();
+}
+
+function addToCart(name, price) {
+  cart.push({name, price});
+  alert('تمت الإضافة إلى السلة');
+}
+
+function renderCart() {
+  let box = document.getElementById('cartItems');
+  box.innerHTML = '';
+  if(cart.length === 0){
+    box.innerHTML = '<p>السلة فارغة</p>';
+    return;
+  }
+  cart.forEach(item => {
+    box.innerHTML += `
+      <div class="product">
+        <h4>${item.name}</h4>
+        <p>${item.price}$</p>
+      </div>
+    `;
+  });
 }
 </script>
 
