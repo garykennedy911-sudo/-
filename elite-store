@@ -1,0 +1,9 @@
+elite-store
+│── index.html
+│── package.json
+│── vite.config.ts
+│── tsconfig.json
+│── index.tsx
+│── App.tsx
+│── constants.tsx   ⭐ (قسم الهواتف)
+│── types.ts
